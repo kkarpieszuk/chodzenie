@@ -3,14 +3,68 @@
   <head>
     <meta charset="utf-8">
     <title>Chodzenie</title>
-    <link rel="stylesheet" href="leaflet/leaflet.css"
-   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-   crossorigin=""/>
-   <script src="leaflet/leaflet.js"
-   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-   crossorigin=""></script>
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet/Leaflet.TextPath.js"></script>
+    <style media="screen">
+     body {
+       margin: 0;
+       padding: 0;
+     }
+     #mapid {
+       height: 100vh;
+     }
+    </style>
   </head>
   <body>
+    <div id="mapid"></div>
+
+
+    <script type="text/javascript">
+      var mymap = L.map('mapid').setView([53.1341, 23.1551], 13);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2pvOTJocWdpMDExMTNybXJwYm5xM3pseiJ9.uWWVOYnw9Ihd9ev1AKMs3w', {
+     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+     maxZoom: 18,
+     id: 'mapbox.streets',
+     accessToken: 'pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2pvOTJocWdpMDExMTNybXJwYm5xM3pseiJ9.uWWVOYnw9Ihd9ev1AKMs3w'
+ }).addTo(mymap);
+
+var move = [
+  {
+    day: '2019-02-18',
+    minutes: 130,
+    lenght: 2200,
+    coords: [
+      [53.129387, 23.083875],
+      [53.129747, 23.083896],
+      [53.129850, 23.084829],
+      [53.128459, 23.085290],
+      [53.124547, 23.113660]
+    ]
+  }
+];
+
+var color = 'red';
+
+for (var move_day = 0; move_day < move.length; move_day++) {
+
+  if ( typeof bound_start == 'undefined' ) {
+    var bound_start = move[move_day]['coords'][0];
+  }
+
+  var bound_end = move[move_day]['coords'][ move[move_day]['coords'].length - 1 ];
+
+  if (color == 'red') {
+    color = 'black';
+  }
+  L.polyline( move[move_day]['coords'], {color: color} ).addTo(mymap).setText( move[move_day]['day'] , {center: true, offset: -10});
+}
+
+mymap.fitBounds( [bound_start, bound_end] );
+
+    </script>
+
 
   </body>
 </html>
