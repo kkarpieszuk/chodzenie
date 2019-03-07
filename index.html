@@ -21,7 +21,7 @@
 
 
     <script type="text/javascript">
-      var mymap = L.map('mapid').setView([53.1341, 23.1551], 13);
+      var mymap = L.map('mapid').setView([53.1341, 23.1551], 12);
 
       L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2pvOTJocWdpMDExMTNybXJwYm5xM3pseiJ9.uWWVOYnw9Ihd9ev1AKMs3w', {
      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -34,13 +34,116 @@ var move = [
   {
     day: '2019-02-18',
     minutes: 130,
-    lenght: 2200,
+    length: 2200,
     coords: [
       [53.129387, 23.083875],
       [53.129747, 23.083896],
       [53.129850, 23.084829],
       [53.128459, 23.085290],
       [53.124547, 23.113660]
+    ]
+  },
+  {
+    day: '2019-02-19',
+    minutes: 122,
+    length: 3050,
+    coords: [
+      [53.124547, 23.113660],
+      [53.123317, 23.122532],
+      [53.125641, 23.130632],
+      [53.125377, 23.138013],
+      [53.120181, 23.148066],
+      [53.119486, 23.154997]
+    ]
+  },
+  {
+    day: '2019-02-21',
+    minutes: 58,
+    length: 2130,
+    coords: [
+      [53.119486, 23.154997],
+      [53.118302, 23.165994],
+      [53.115469, 23.177495],
+      [53.114200, 23.178739],
+      [53.115938, 23.183836]
+    ]
+  },
+  {
+    day: '2019-02-22',
+    minutes: 58,
+    length: 2090,
+    coords: [
+      [53.115938, 23.183836],
+      [53.121962, 23.201549],
+      [53.122715, 23.212449]
+    ]
+  },
+  {
+    day: '2019-02-25',
+    minutes: 72,
+    length: 3710,
+    coords: [
+      [53.122715, 23.212449],
+      [53.123833, 23.226355],
+      [53.126048, 23.232020],
+      [53.125932, 23.239391],
+      [53.125211, 23.247974],
+      [53.125359, 23.266739]
+    ]
+  },
+  {
+    day: '2019-02-26',
+    minutes: 136,
+    length: 6390,
+    coords: [
+      [53.125359, 23.266739],
+      [53.125613, 23.362513]
+    ]
+  },
+  {
+    day: '2019-02-28',
+    minutes: 135,
+    length: 6470,
+    coords: [
+      [53.125613, 23.362513],
+      [53.125876, 23.418783],
+      [53.137395, 23.448455],
+      [53.138180, 23.453637]
+    ]
+  },
+  {
+    day: '2019-03-01',
+    minutes: 96,
+    length: 5140,
+    coords: [
+      [53.138180, 23.453637],
+      [53.141002, 23.476916],
+      [53.140217, 23.485188],
+      [53.143448, 23.494576],
+      [53.144330, 23.506539],
+      [53.141312, 23.527728]
+    ]
+  },
+  {
+    day: '2019-03-06',
+    minutes: 143,
+    length: 7730,
+    coords: [
+      [53.141312, 23.527728],
+      [53.119397, 23.596067],
+      [53.111083, 23.631118]
+    ]
+  },
+  {
+    day: '2019-03-07',
+    minutes: 140,
+    length: 7750,
+    coords: [
+      [53.111083, 23.631118],
+      [53.108061, 23.644335],
+      [53.111616, 23.673893],
+      [53.109632, 23.688956],
+      [53.109664, 23.742139]
     ]
   }
 ];
@@ -57,7 +160,10 @@ for (var move_day = 0; move_day < move.length; move_day++) {
 
   if (color == 'red') {
     color = 'black';
+  } else {
+    color = 'red';
   }
+
   L.polyline( move[move_day]['coords'], {color: color} ).addTo(mymap).setText( move[move_day]['day'] , {center: true, offset: -10});
 }
 
