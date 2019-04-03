@@ -31,7 +31,7 @@
      accessToken: 'pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2pvOTJocWdpMDExMTNybXJwYm5xM3pseiJ9.uWWVOYnw9Ihd9ev1AKMs3w'
  }).addTo(mymap);
 
-var color = 'red';
+var color = '#8789c0';
 
 for (var move_day = 0; move_day < move.length; move_day++) {
 
@@ -41,10 +41,10 @@ for (var move_day = 0; move_day < move.length; move_day++) {
 
   var bound_end = move[move_day]['coords'][ move[move_day]['coords'].length - 1 ];
 
-  if (color == 'red') {
-    color = 'black';
+  if (color == '#8789c0') {
+    color = '#08090a';
   } else {
-    color = 'red';
+    color = '#8789c0';
   }
 
   L.polyline( move[move_day]['coords'], {color: color} ).addTo(mymap).setText( move[move_day]['day'] , {center: true, offset: -10});
