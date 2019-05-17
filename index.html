@@ -15,10 +15,24 @@
      #mapid {
        height: 100vh;
      }
+
+     #statistics {
+       z-index: 100000000000;
+       position: absolute;
+       width: 300px;
+       background-color: white;
+       padding: 10px;
+       top: 10px;
+       right: 10px;
+       text-align: center;
+       box-shadow: -4px 3px 0px 0px rgba(0,0,0,0.29);
+     }
     </style>
   </head>
   <body>
     <div id="mapid"></div>
+
+    <div id="statistics"></div>
 
 
     <script type="text/javascript">
@@ -32,8 +46,11 @@
  }).addTo(mymap);
 
 var color = '#8789c0';
+var distance = 0;
 
 for (var move_day = 0; move_day < move.length; move_day++) {
+
+  distance = distance + move[move_day]['length'];
 
   if ( typeof bound_start == 'undefined' ) {
     var bound_start = move[move_day]['coords'][0];
@@ -51,6 +68,10 @@ for (var move_day = 0; move_day < move.length; move_day++) {
 }
 
 mymap.fitBounds( [bound_start, bound_end] );
+
+distance = distance / 1000;
+
+document.getElementById('statistics').innerHTML = distance + " km w " + move_day + " dni.";
 
     </script>
 
