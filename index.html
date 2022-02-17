@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
+    <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+    <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
     <script src="leaflet/Leaflet.TextPath.js"></script>
     <script src="move.js"></script>
     <style media="screen">
@@ -50,6 +52,15 @@
     zoomOffset: -1,
     accessToken: 'pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2t5aXBvam52MGxnMDJucW9qYjJleWFociJ9.u45v856wn8ga6EEkc5gE-Q'
  }).addTo(mymap);
+
+      let polylineMeasure = L.control.polylineMeasure().addTo(mymap);
+      polylineMeasure.addTo(mymap);
+
+      mymap.on('polylinemeasure:change', (e) => {
+        console.log( polylineMeasure._currentLine.circleCoords );
+        // measure.push( [ polylineMeasure._currentLine.circleCoords.last().lat + ', ' + polylineMeasure._currentLine.circleCoords.last().lng ] );
+        // console.log( measure );
+      });
 
 var color = '#8789c0';
 var distance = 0;
