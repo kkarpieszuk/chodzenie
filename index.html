@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html lang="pl" dir="ltr">
   <head>
-    <meta charset="utf-8">
-    <title>Chodzenie</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+	<meta charset="utf-8">
+	<title>Chodzenie</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
-    <link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
-    <script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
-    <script src="leaflet/Leaflet.TextPath.js"></script>
-    <script src="move.js"></script>
-    <style media="screen">
-     body {
-       margin: 0;
-       padding: 0;
-     }
-     #mapid {
-       height: 100vh;
-     }
+	<link rel="stylesheet" href="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.css" />
+	<script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+	<script src="leaflet/Leaflet.TextPath.js"></script>
+	<script src="move.js"></script>
+	<style media="screen">
+	 body {
+	   margin: 0;
+	   padding: 0;
+	 }
+	 #mapid {
+	   height: 100vh;
+	 }
 
-     #statistics {
-       z-index: 100000000000;
-       position: absolute;
-       width: 300px;
-       background-color: white;
-       padding: 10px;
-       top: 10px;
-       right: 10px;
-       text-align: center;
-       box-shadow: -4px 3px 0px 0px rgba(0,0,0,0.29);
-     }
-    </style>
+	 #infobox {
+	   z-index: 100000000000;
+	   position: absolute;
+	   width: 300px;
+	   background-color: white;
+	   padding: 10px;
+	   top: 10px;
+	   right: 10px;
+	   text-align: center;
+	   box-shadow: -4px 3px 0px 0px rgba(0,0,0,0.29);
+	 }
+	 #path {
+		 text-align: left;
+	 }
+	</style>
   </head>
   <body>
-    <div id="mapid"></div>
+	<div id="mapid"></div>
 
-    <div id="statistics"></div>
+	<div id="infobox">
+		<div id="distance"></div>
+		<pre id="path"></pre>
+	</div>
 
 
-    <script type="text/javascript">
-      var mymap = L.map('mapid').setView([53.1341, 23.1551], 12);
+	<script type="text/javascript">
+	  var mymap = L.map('mapid').setView([53.1341, 23.1551], 12);
 
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2t5aXBvam52MGxnMDJucW9qYjJleWFociJ9.u45v856wn8ga6EEkc5gE-Q', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2t5aXBvam52MGxnMDJucW9qYjJleWFociJ9.u45v856wn8ga6EEkc5gE-Q'
+	  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2t5aXBvam52MGxnMDJucW9qYjJleWFociJ9.u45v856wn8ga6EEkc5gE-Q', {
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	maxZoom: 18,
+	id: 'mapbox/streets-v11',
+	tileSize: 512,
+	zoomOffset: -1,
+	accessToken: 'pk.eyJ1Ijoia2thcnBpZXN6dWsiLCJhIjoiY2t5aXBvam52MGxnMDJucW9qYjJleWFociJ9.u45v856wn8ga6EEkc5gE-Q'
  }).addTo(mymap);
 
-      let polylineMeasure = L.control.polylineMeasure().addTo(mymap);
-      polylineMeasure.addTo(mymap);
+	  let polylineMeasure = L.control.polylineMeasure().addTo(mymap);
+	  let coords = [];
+	  let printCoords = function() {
+		  document.querySelector('#infobox #path').innerHTML = '';
+		  coords.map( ( coord ) => {
+			  document.querySelector('#infobox #path').appendChild( document.createTextNode( coord ) );
+		  } );
+	  };
 
-      mymap.on('polylinemeasure:change', (e) => {
-        console.log( polylineMeasure._currentLine.circleCoords );
-        // measure.push( [ polylineMeasure._currentLine.circleCoords.last().lat + ', ' + polylineMeasure._currentLine.circleCoords.last().lng ] );
-        // console.log( measure );
-      });
+	  polylineMeasure.addTo(mymap);
+
+	  mymap.on('polylinemeasure:add', (e) => {
+		coords.push( '[' + polylineMeasure._currentLine.circleCoords.last().lat.toString() + ', ' + polylineMeasure._currentLine.circleCoords.last().lng.toString() + '],\n' );
+		printCoords();
+
+	  });
+
+	  mymap.on('polylinemeasure:remove', (e) => {
+		  coords.pop();
+		  printCoords();
+	  });
 
 var color = '#8789c0';
 var distance = 0;
@@ -70,15 +89,15 @@ for (var move_day = 0; move_day < move.length; move_day++) {
   distance = distance + move[move_day]['length'];
 
   if ( typeof bound_start == 'undefined' ) {
-    var bound_start = move[move_day]['coords'][0];
+	var bound_start = move[move_day]['coords'][0];
   }
 
   var bound_end = move[move_day]['coords'][ move[move_day]['coords'].length - 1 ];
 
   if (color == '#8789c0') {
-    color = '#08090a';
+	color = '#08090a';
   } else {
-    color = '#8789c0';
+	color = '#8789c0';
   }
 
   L.polyline( move[move_day]['coords'], {color: color} ).addTo(mymap).setText( move[move_day]['day'] , {center: true, offset: -10});
@@ -88,9 +107,9 @@ mymap.fitBounds( [bound_start, bound_end] );
 
 distance = distance / 1000;
 
-document.getElementById('statistics').innerHTML = distance + " km w " + move_day + " dni.";
+document.querySelector('#infobox #distance').innerHTML = distance + " km w " + move_day + " dni.";
 
-    </script>
+	</script>
 
 
   </body>
